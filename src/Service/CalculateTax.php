@@ -6,7 +6,7 @@ class CalculateTax {
   public function getTotalHT($products) {
     $totalPrice = 0;
     foreach ($products as $product) {
-      $totalPrice += $product->getPrice();
+      $totalPrice += $product["product"]->getPrice() * $product["quantity"];
     }
     return $totalPrice;
   }
@@ -14,7 +14,7 @@ class CalculateTax {
   public function getTotalTTC($products, $tva) {
     $totalPrice = 0;
     foreach ($products as $product) {
-      $totalPrice += ($product->getPrice() + $product->getPrice() * $tva);
+      $totalPrice += (($product["product"]->getPrice() + $product["product"]->getPrice() * $tva) * $product["quantity"]);
     }
     return $totalPrice; 
   }

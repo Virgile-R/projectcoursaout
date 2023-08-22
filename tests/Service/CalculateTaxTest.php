@@ -18,14 +18,18 @@ class CalculateTaxTest extends KernelTestCase {
     $product3->setName('Apple Iphone 9');
     $product3->setPrice(1200);
     
-    $productArray = [$product1, $product2, $product3];
+    $productArray = [
+      ["product"=>$product1, "quantity"=>2], 
+      ["product"=>$product2, "quantity"=>1], 
+      ["product"=>$product3, "quantity"=>3]
+    ];
     $tva = 0.15;
 
 
     $calculateTax = new CalculateTax();
 
-    $this->assertEquals(2500, $calculateTax->getTotalHT($productArray));
-    $this->assertEquals(2875, $calculateTax->getTotalTTC($productArray, $tva));
+    $this->assertEquals(5300, $calculateTax->getTotalHT($productArray));
+    $this->assertEquals(6095, $calculateTax->getTotalTTC($productArray, $tva));
 
   }
 }
