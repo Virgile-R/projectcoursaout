@@ -12,9 +12,9 @@ class CalculateTax {
   }
 
   public function getTotalTTC($products, $tva) {
-    $totalPrice = 0;
+    $totalPrice = $this->getTotalHT($products);
     foreach ($products as $product) {
-      $totalPrice += (($product["product"]->getPrice() + $product["product"]->getPrice() * $tva) * $product["quantity"]);
+      $totalPrice += ($product["product"]->getPrice() * $tva) * $product["quantity"];
     }
     return $totalPrice; 
   }

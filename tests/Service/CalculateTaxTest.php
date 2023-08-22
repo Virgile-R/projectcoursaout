@@ -5,7 +5,8 @@ use App\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CalculateTaxTest extends KernelTestCase {
-  public function testCalculateTaxService() {
+
+  public function generateProductArray() {
     $product1 = new Product();
     $product1->setName('TV Samsung 40"');
     $product1->setPrice(400);
@@ -27,8 +28,22 @@ class CalculateTaxTest extends KernelTestCase {
 
 
     $calculateTax = new CalculateTax();
+    return ["productArray" => [$productArray, $calculateTax, $tva]];
+  }
+  /**
+   * @dataProvider generateProductArray
+   */
+  public function testCalculateTaxServiceHT($productArray,  $calculateTax, $tva) {
 
     $this->assertEquals(5300, $calculateTax->getTotalHT($productArray));
+
+  }
+
+  /**
+   * @dataProvider generateProductArray
+   */
+  public function testCalculateTaxServiceTTC($productArray,  $calculateTax, $tva) {
+    
     $this->assertEquals(6095, $calculateTax->getTotalTTC($productArray, $tva));
 
   }
