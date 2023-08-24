@@ -53,8 +53,9 @@ class RegisterControllerTest extends WebTestCase
  
     protected function tearDown():void{
         parent::tearDown();
-        if ($this->entityManager->getRepository(User::class)->findOneByEmail('john.doe@test.com')) {
-          $this->entityManager->remove($this->entityManager->getRepository(User::class)->findOneByEmail('john.doe@test.com'));
+        $testUser = $this->entityManager->getRepository(User::class)->findOneByEmail('john.doe@test.com');
+        if ($testUser) {
+          $this->entityManager->remove($testUser);
           $this->entityManager->flush();
         }
         $this->client = null;

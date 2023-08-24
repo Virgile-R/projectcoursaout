@@ -23,10 +23,12 @@ class LoginControllerTest extends WebTestCase
     }
     public function testSuccessfulLogin()
     {
-       $userRepository = static::getContainer()->get(UserRepository::class);
-       $testUser = $userRepository->findOneByEmail('test0@test.com');
-       $this->client->loginUser($testUser);
-       $this->client->request('GET', '/');
+      $this->client->followRedirects();
+      $this->client->request('GET', '/login');
+      $crawler = $this->client->submitForm('login', [
+        '_username' => 'test0@test.com',
+        '_password' => 'Abcde123!'
+      ]);
        $this->assertResponseIsSuccessful();
        $this->assertSelectorTextContains('h1', 'Vous êtes connecté !');
     }
