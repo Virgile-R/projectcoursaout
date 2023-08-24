@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+    # Installation de l’image PHP
+    - image: cimg/php:8.2.4
+    - image: cimg/mysql:8.0
+  steps:
+      - checkout
+      - run: sudo apt update
+      - run: sudo docker-php-ext-install zip  
+      - restore_cache:
+          keys:
+            # Clé de cache correspondant au fichier composer.json
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # Clé de cache par défaut (en cas de non-correspondance avec la clé précédente)
+            - v1-dependencies-
+      # Installation des dépendances avec Composer
+      - run:
+          name: "Install Dependencies"
+          command: composer install -n --prefer-dist
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+      - run:
+          name: "Run tests"
+          command: composer test
