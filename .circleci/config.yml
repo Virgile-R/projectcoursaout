@@ -6,7 +6,7 @@ jobs:
     # Installation de l’image PHP
     - image: cimg/php:8.2.4
     - image: cimg/mysql:8.0
-  steps:
+    steps:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip  
