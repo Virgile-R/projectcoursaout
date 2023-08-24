@@ -2,11 +2,10 @@
  
 namespace App\Tests\Controller;
  
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  
-class RegisterTest extends WebTestCase
+class RegisterControllerTest extends WebTestCase
 {
     private $client;
     private $entityManager;
@@ -15,9 +14,10 @@ class RegisterTest extends WebTestCase
         parent::setUp();
  
         $this->client = static::createClient();
-        $this->entityManager = new EntityManagerInterface();
+        $this->entityManager = static::getContainer()
+            ->get('doctrine')
+            ->getManager();
  
-        //Créer l'entity manager
     }
     public function testRenderRegisterPage()
     {
@@ -30,15 +30,15 @@ class RegisterTest extends WebTestCase
     {
       $this->client->followRedirects();
       $crawler = $this->client->request('GET', '/register');
-      $buttonCrawlerNode = $crawler->selectButton('submit');
+      $buttonCrawlerNode = $crawler->selectButton('Register');
 
 
       $form = $buttonCrawlerNode->form();
-      $form['registrationForm[firstName]'] = 'John';
-      $form['registrationForm[lastName]'] = 'Doe';
-      $form['registrationForm[email]'] = 'john.doe@test.com';
-      $form['registrationForm[plainPassword]'] = 'testPassword';
-      $form['registrationForm[agreeTerms]']->tick();
+      $form['registration_form[firstName]'] = 'John';
+      $form['registration_form[lastName]'] = 'Doe';
+      $form['registration_form[email]'] = 'john.doe@test.com';
+      $form['registration_form[plainPassword]'] = 'testPassword';
+      $form['registration_form[agreeTerms]']->tick();
 
       $this->client->submit($form);
 
@@ -46,16 +46,17 @@ class RegisterTest extends WebTestCase
       $this->assertResponseIsSuccessful();
       $this->assertPageTitleSame('Login');
 
-      $userRepository = static::getContainer()->get(UserRepository::class);
-      $testUser = $userRepository->findOneByEmail('john.doe0@test.com');
+      $testUser = $this->entityManager->getRepository(User::class)->findOneByEmail('john.doe@test.com');
+      
       $this->assertNotNull($testUser);
     }
  
     protected function tearDown():void{
         parent::tearDown();
-        $testUser = $userRepository->findOneByEmail('john.doe0@test.com');
-        $this->entityManager->remove($testUser);
-        $this->entityManager->flush();
+        if ($this->entityManager->getRepository(User::class)->findOneByEmail('john.doe@test.com')) {
+          $this->entityManager->remove($this->entityManager->getRepository(User::class)->findOneByEmail('john.doe@test.com'));
+          $this->entityManager->flush();
+        }
         $this->client = null;
         $this->entityManager = null;
     }

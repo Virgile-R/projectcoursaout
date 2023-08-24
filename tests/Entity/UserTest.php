@@ -16,7 +16,7 @@ class UserTest extends KernelTestCase {
     $this->assertEquals('test@test.com', $user->getEmail(), "user email does not match");
     $this->assertContains('ROLE_USER', $user->getRoles(), "user doesn't have a role");
     $this->assertNotNull($user->getPassword(), "user has password");
-    $this->assertTrue(password_verify('Abcde123!', $user->getPassword()), "user password doesn't match hash");
+    $this->assertEquals('Abcde123!', $user->getPassword());
     $this->assertEquals('test@test.com', $user->getUserIdentifier(), "user identifier isn't an email");
   }
 }

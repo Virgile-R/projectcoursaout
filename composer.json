@@ -80,7 +80,7 @@
             "@auto-scripts"
         ],
         "test": [
-            "php bin/phpunit"
+            "make tests"
         ],
         "test:coverage": [
             "php bin/phpunit --coverage-html tests_coverage"
