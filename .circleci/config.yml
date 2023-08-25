@@ -33,6 +33,8 @@ jobs:
             - ./vendor
       - run:
           name: "Run tests"
+          environment: 
+            XDEBUG_MODE: coverage
           command: |
             sudo docker-php-ext-enable xdebug
             ./cc-test-reporter before-build 
