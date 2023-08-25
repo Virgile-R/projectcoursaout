@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip  
-      - run: sudo -E install-php-extensions xsl xdebug
+      - run: sudo pecl install xdebug
       - restore_cache:
           keys:
             # Clé de cache correspondant au fichier composer.json
