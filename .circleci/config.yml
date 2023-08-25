@@ -2,6 +2,8 @@ version: 2.1
 
 jobs:
   build:
+    environment:
+      CC_TEST_REPORTER_ID: 9b4ebad9faa576e4f9c7b612325ab8b4824506c2e60b43607a93c557edbe9ded
     docker:
     # Installation de l’image PHP
     - image: cimg/php:8.2.4
@@ -20,10 +22,19 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: composer install -n --prefer-dist
+      - run:
+          name: Setup Code Climate test-reporter
+          command:
+          # download test reporter as a static binary
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter    
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
       - run:
           name: "Run tests"
-          command: composer test
+          command:
+            ./cc-test-reporter before-build 
+            composer test
+            ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
