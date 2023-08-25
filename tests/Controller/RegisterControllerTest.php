@@ -50,6 +50,27 @@ class RegisterControllerTest extends WebTestCase
       
       $this->assertNotNull($testUser);
     }
+
+    public function testUnsuccessfulRegister()
+    { 
+      $crawler = $this->client->request('GET', '/register');
+      $buttonCrawlerNode = $crawler->selectButton('Register');
+
+
+      $form = $buttonCrawlerNode->form();
+      $form['registration_form[firstName]'] = 'John';
+      $form['registration_form[lastName]'] = 'Doe';
+      $form['registration_form[email]'] = 'wrongemailformat';
+      $form['registration_form[plainPassword]'] = 'testPassword';
+      $form['registration_form[agreeTerms]']->tick();
+
+      $this->client->submit($form);
+      $this->assertResponseIsSuccessful();
+      $this->assertPageTitleSame('Register');
+      $this->assertSelectorTextContains('li', 'Please enter a valid email.' );
+
+
+    }
  
     protected function tearDown():void{
         parent::tearDown();
