@@ -84,6 +84,9 @@
         ],
         "test:coverage": [
             "php bin/phpunit --coverage-html tests_coverage"
+        ],
+        "test:CI": [
+            "sudo vendor/bin/phpunit --coverage-clover clover.xml"
         ]
     },
     "conflict": {
