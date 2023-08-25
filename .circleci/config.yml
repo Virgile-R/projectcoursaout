@@ -6,7 +6,7 @@ jobs:
       CC_TEST_REPORTER_ID: 9b4ebad9faa576e4f9c7b612325ab8b4824506c2e60b43607a93c557edbe9ded
     docker:
     # Installation de l’image PHP
-    - image: cimg/php:8.2.4
+    - image: mileschou/xdebug:7.3
     - image: cimg/mysql:8.0
     steps:
       - checkout
