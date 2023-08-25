@@ -36,7 +36,6 @@ jobs:
           environment: 
             XDEBUG_MODE: coverage
           command: |
-            sudo docker-php-ext-enable xdebug
             ./cc-test-reporter before-build 
             composer test:CI
             ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
