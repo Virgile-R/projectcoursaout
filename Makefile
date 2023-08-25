@@ -5,5 +5,5 @@ tests:
 	php bin/console doctrine:database:create --env=test
 	php bin/console doctrine:migrations:migrate -n --env=test
 	php bin/console doctrine:fixtures:load -n --env=test
-	php bin/phpunit --coverage-clover clover.xml $(MAKECMDGOALS)
+	sudo vendor/bin/phpunit --coverage-clover clover.xml $(MAKECMDGOALS)
 .PHONY: tests
