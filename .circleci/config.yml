@@ -11,8 +11,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update
-      - run: sudo docker-php-ext-install zip  
-      - run: sudo pecl install xdebug
+      - run: sudo docker-php-ext-install zip
+      - run: sudo pecl install xdebug  
       - restore_cache:
           keys:
             # Clé de cache correspondant au fichier composer.json
